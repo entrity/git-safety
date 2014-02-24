@@ -5,42 +5,27 @@
 # $ sudo curl https://gist.github.com/Vaselinessa/8361013/raw/install-gitsafety.sh | bash
 #
  
-# Destination for downloaded git extensions
-dst=
- 
-# If user is ROOT (sudo), install at usr/local/bin
-if [[ "$(whoami)" == "root" ]]; then
-	dst="/usr/local/bin"
-else
-	# If user is not ROOT (sudo), find earliest PATH directory which is writable for current user
-	while IFS=':' read -ra DIRS; do
-		for d in "${DIRS[@]}"; do
-			if [[ -w $d ]]; then
-				dst=$d
-				break
-			fi
-		done
-	done <<< $PATH
+# Determine destination for downloaded git extensions
+[[ -z "$dst" ]] && dst=$(which git-safetycommit)
+[[ -z "$dst" ]] && dst=$1
+[[ -z "$dst" ]] && dst="/usr/local/bin"
+if [[ ! -w $dst ]]; then
+	fail "ERROR: you have no write permissions to $dst. Please use sudo and try again"
 fi
- 
-if [[ -z "$dst" ]]; then
-	echo "== ERROR: you have no write permissions to anything on your \$PATH. Please update your \$PATH variable OR use sudo and try again"
-	exit 1
-fi
- 
-echo Downloading git extensions
- 
+
 # Download extension files
-wget https://gist.github.com/Vaselinessa/8361013/raw/git-safetymerge -O $dst/git-safetymerge
-wget https://gist.github.com/Vaselinessa/8361013/raw/git-safetycommit -O $dst/git-safetycommit
+echo Downloading git extensions
+dl_dir=https://raw2.github.com/Vaselinessa/git-safety/master
+wget $dl_dir/git-safety-functions.sh -P $dst
+wget $dl_dir/git-safetymerge -P $dst
+wget $dl_dir/git-safetycommit -P $dst
  
 # Make safety extensions executable
-chmod +x $dst/git-safetymerge
-chmod +x $dst/git-safetycommit
+chmod +x $dst/git-safety*
  
 # Alias git in .bash_profile
-cat << 'HERED' >> $HOME/.bash_profile
- 
+read -r -d '' bash_alias <<- 'EOF'
+
 function git_safety {
   cmd=$1
   shift
@@ -53,9 +38,14 @@ function git_safety {
   "`which git`" "$cmd" "$@"
 }
 alias git=git_safety
- 
-HERED
+
+EOF
+
+if [[ ! -f $HOME/.bash_profile ]] || ! grep -q $bash_alias $HOME/.bash_profile; then
+	echo "$bash_alias" >> $HOME/.bash_profile
+fi
  
 # Echo instructions
+echo !!! SUCCESSFUL UPDATE/INSTALL
 echo !!! IN ALL OF YOUR SHELL WINDOWS/TABS, SOURCE ~/.bash_profile \
 OR CLOSE AND RE-OPEN ALL OF YOUR SHELL WINDOWS/TABS !!!
