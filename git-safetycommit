@@ -1,4 +1,6 @@
 #!/bin/bash
+
+. `dirname $0`/git-safety-functions.sh
  
 # check for -f flag as first argument; if present, bypass all restrictions
 if [[ "$1" == "-f" ]]; then
@@ -7,20 +9,12 @@ if [[ "$1" == "-f" ]]; then
 	exit 0
 fi
  
-fail()
-{
-	echo ==========================
-	echo -e $1
-	echo ==========================
-	exit 1
-}
- 
 # copy args so that $@ can be shifted but we can pass all args to git-merge
 args=$@
  
 # Determine whether this is the Dataraptor proj.
 # If so, impose constraints. If not, skip to execution.
-if [[ -r "config/application.rb" && ! -z $(grep Clu2 "config/application.rb") ]]; then
+if $use_safety_extension; then
  
 	# determine current branch
 	dst=$(git status | grep "On branch" | cut -d " " -f 4)
@@ -42,7 +36,7 @@ if [[ -r "config/application.rb" && ! -z $(grep Clu2 "config/application.rb") ]]
 	git diff --cached | egrep -q "\+.*debugger" && {
 		fail "You cannot commit 'debugger' to source control.\nRun \`git diff --cached | egrep -l \"\+.*debugger\"\`"
 	}
- 
+
 fi
  
 # Execute merge

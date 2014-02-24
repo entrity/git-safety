@@ -1,4 +1,6 @@
 #!/bin/bash
+
+. `dirname $0`/git-safety-functions.sh
  
 # Echo usage if there are no args
 if [[ $# == 0 ]]; then
@@ -9,19 +11,12 @@ if [[ $# == 0 ]]; then
 	exit 1
 fi
  
-# subroutine for handling failures
-fail ()
-{
-	echo "== ERROR: $1"
-	exit 1
-}
- 
 # copy args so that $@ can be shifted but we can pass all args to git-merge
 args=$@
  
 # Determine whether this is the Dataraptor proj.
 # If so, impose constraints. If not, skip to execution.
-if [[ -r "config/application.rb" && ! -z $(grep Clu2 "config/application.rb") ]]; then
+if $use_safety_extension; then
  
 	# determine current branch
 	dst=$(git status | grep "On branch" | cut -d " " -f 4)
