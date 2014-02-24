@@ -1,0 +1,56 @@
+#!/bin/bash
+ 
+# Echo usage if there are no args
+if [[ $# == 0 ]]; then
+	echo =============================
+	echo 'You are using "git safetymerge"'
+	echo 'Please supply args just as you would for "git merge"'
+	echo =============================
+	exit 1
+fi
+ 
+# subroutine for handling failures
+fail ()
+{
+	echo "== ERROR: $1"
+	exit 1
+}
+ 
+# copy args so that $@ can be shifted but we can pass all args to git-merge
+args=$@
+ 
+# Determine whether this is the Dataraptor proj.
+# If so, impose constraints. If not, skip to execution.
+if [[ -r "config/application.rb" && ! -z $(grep Clu2 "config/application.rb") ]]; then
+ 
+	# determine current branch
+	dst=$(git status | grep "On branch" | cut -d " " -f 4)
+	# determine source of merge
+	while (( $# )); do
+		[[  "$1" =~ ^- ]] || break
+		shift
+	done
+	src=$1
+ 
+	# Echo debug message
+	echo Merge requested from $src to $dst
+ 
+	# determine whether current branch be behind its remote tracking branch
+	branch_description=$( git branch --list -vv | grep '^\*' )
+	is_behind=$( echo "$branch_description" | grep  -e '\[.*behind.*\]' )
+	# Fail if current branch be behind its remote tracking branch
+	[[ ! -z "$is_behind" ]] && fail "Your branch is behind the remote branch. Pull before merging."
+ 
+ 
+	# Fail if master|develop merges to master|develop
+	[[ "$src" =~ ^(master|develop)$ && "$dst" =~ ^(master|develop)$ ]] && fail "You may not merge between master and develop"
+	# Fail if source of merge is master
+	[[ "$src" == "master" ]] && fail "You may not merge from master to anything"
+ 
+fi
+ 
+# Execute merge
+git-merge $args
+ 
+# Echo ending message
+echo end without error
