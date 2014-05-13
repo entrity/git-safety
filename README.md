@@ -14,6 +14,22 @@
 
 	$ git config --global ext.gitsafety true
 
+After installation, be sure to source your <code>.bash_profile</code> in all
+open shells or else close and reopen all of your shells.
+
+### Verifying your installation ###
+
+If you specify a destination when you run the install command, make sure that
+destination is on your path or that you have symlinks on your path which point
+to the individual extension files (only the ones that begin 'git-' and have no
+file extension).
+
+After installation, run <code>which git-safetycommit</code>. If the output is
+different than where you intended to install these extensions, then you may
+have multiple installations on your computer. Just remove existing
+installations until <code>which git-safetycommit</code> outputs the expected
+location.
+
 ## Update ##
 
 Same as install.
