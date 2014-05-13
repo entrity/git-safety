@@ -2,7 +2,7 @@
  
 # Usage:
 #
-# $ [sudo] curl https://gist.github.com/Vaselinessa/8361013/raw/install-gitsafety.sh | bash [-s destination]
+#   $ [sudo] curl https://raw.githubusercontent.com/Vaselinessa/git-safety/master/install-git-safety.sh | bash [-s destination]
 #
  
 # Determine destination for downloaded git extensions
@@ -27,6 +27,7 @@ chmod +x $dst/git-safety*
 # Alias git in .bash_profile
 read -r -d '' bash_alias <<- 'EOF'
 
+# Start git-safety code
 function git_safety {
   cmd=$1
   shift
@@ -39,16 +40,18 @@ function git_safety {
   "`which git`" "$cmd" "$@"
 }
 alias git=git_safety
-
+# End git-safety code
 EOF
 
-echo $bash_alias
+echo Adding alias to \$HOME/.bash_profile
 
-if [[ ! -f $HOME/.bash_profile ]] || ! grep -q $bash_alias $HOME/.bash_profile; then
-	echo -e "$bash_alias" >> $HOME/.bash_profile
+if [[ -f $HOME/.bash_profile ]]; then
+  sed -i.bak '/Start git-safety code/,/End git-safety code/d' $HOME/.bash_profile
 fi
+echo -e "$bash_alias" >> $HOME/.bash_profile
  
 # Echo instructions
 echo !!! SUCCESSFUL UPDATE/INSTALL
+echo !!! Please update your git aliases as necessary.
 echo !!! IN ALL OF YOUR SHELL WINDOWS/TABS, SOURCE ~/.bash_profile \
 OR CLOSE AND RE-OPEN ALL OF YOUR SHELL WINDOWS/TABS !!!

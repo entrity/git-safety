@@ -1,12 +1,10 @@
 ## Install ##
 
-    # Install to /usr/local/bin
-    $ sudo curl https://raw.github.com/Vaselinessa/git-safety/master/install-git-safety.sh | bash
-    
-    # OR
+	Will install to $destination if provided. Else, will install to location of
+	current install. If no current install exists, will install to
+	/usr/local/bin/.
 
-    # Install to dir of your choice (make sure it's on your PATH)
-    $ curl https://raw.github.com/Vaselinessa/git-safety/master/install-git-safety.sh $DIR_ON_PATH | bash
+  $ [sudo] curl https://raw.githubusercontent.com/Vaselinessa/git-safety/master/install-git-safety.sh | bash [-s destination]
 
 ## Update ##
 
