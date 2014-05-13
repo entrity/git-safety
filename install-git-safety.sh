@@ -18,7 +18,7 @@ echo Downloading git extensions to $dst
 declare -a files=("git-safety-functions.sh" "git-safetymerge" "git-safetycommit")
 dl_dir=https://raw2.github.com/Vaselinessa/git-safety/master
 for f in "${files[@]}"; do
-  wget -nv $dl_dir/$f -O $dst/$f
+  wget -nv $dl_dir/$f -O $dst/$f || fail "Failed to download. You may need to use sudo."
 done
  
 # Make safety extensions executable
