@@ -1,6 +1,6 @@
 ## Install ##
 
-		# Install to /usr/local/bin
+    # Install to /usr/local/bin
     $ sudo curl https://raw.github.com/Vaselinessa/git-safety/master/install-git-safety.sh | bash
     
     # OR

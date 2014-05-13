@@ -1,6 +1,13 @@
 #!/bin/bash
 
 . `dirname $0`/git-safety-functions.sh
+
+# check for -f flag as first argument; if present, bypass all restrictions
+if [[ "$1" == "-f" ]]; then
+	shift
+	git-merge "$@"
+	exit 0
+fi
  
 # Echo usage if there are no args
 if [[ $# == 0 ]]; then
@@ -39,8 +46,6 @@ if $use_safety_extension; then
  
 	# Fail if master|develop merges to master|develop
 	[[ "$src" =~ ^(master|develop)$ && "$dst" =~ ^(master|develop)$ ]] && fail "You may not merge between master and develop"
-	# Fail if source of merge is master
-	[[ "$src" == "master" ]] && fail "You may not merge from master to anything"
  
 fi
  
