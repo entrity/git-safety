@@ -16,9 +16,9 @@ fi
 # Download extension files
 echo Downloading git extensions
 dl_dir=https://raw2.github.com/Vaselinessa/git-safety/master
-wget $dl_dir/git-safety-functions.sh -P $dst
-wget $dl_dir/git-safetymerge -P $dst
-wget $dl_dir/git-safetycommit -P $dst
+wget -p $dl_dir/git-safety-functions.sh -P $dst
+wget -p $dl_dir/git-safetymerge -P $dst
+wget -p $dl_dir/git-safetycommit -P $dst
  
 # Make safety extensions executable
 echo Setting chmod +x
