@@ -14,11 +14,12 @@ if [[ ! -w $dst ]]; then
 fi
 
 # Download extension files
-echo Downloading git extensions
+echo Downloading git extensions to $dst
+declare -a files=("git-safety-functions.sh" "git-safetymerge" "git-safetycommit")
 dl_dir=https://raw2.github.com/Vaselinessa/git-safety/master
-wget -p $dl_dir/git-safety-functions.sh -P $dst
-wget -p $dl_dir/git-safetymerge -P $dst
-wget -p $dl_dir/git-safetycommit -P $dst
+for f in "${files[@]}"; do
+  wget -nv $dl_dir/$f -O $dst/$f
+done
  
 # Make safety extensions executable
 echo Setting chmod +x
