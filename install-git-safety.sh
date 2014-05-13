@@ -2,12 +2,12 @@
  
 # Usage:
 #
-# $ sudo curl https://gist.github.com/Vaselinessa/8361013/raw/install-gitsafety.sh | bash
+# $ [sudo] curl https://gist.github.com/Vaselinessa/8361013/raw/install-gitsafety.sh | bash [-s destination]
 #
  
 # Determine destination for downloaded git extensions
-[[ -z "$dst" ]] && dst=$(which git-safetycommit)
 [[ -z "$dst" ]] && dst=$1
+[[ -z "$dst" ]] && dst=$([[ ! -z "$(which git-safetycommit)" ]] && dirname $(which git-safetycommit) )
 [[ -z "$dst" ]] && dst="/usr/local/bin"
 if [[ ! -w $dst ]]; then
 	fail "ERROR: you have no write permissions to $dst. Please use sudo and try again"
@@ -21,6 +21,7 @@ wget $dl_dir/git-safetymerge -P $dst
 wget $dl_dir/git-safetycommit -P $dst
  
 # Make safety extensions executable
+echo Setting chmod +x
 chmod +x $dst/git-safety*
  
 # Alias git in .bash_profile
@@ -41,8 +42,10 @@ alias git=git_safety
 
 EOF
 
+echo $bash_alias
+
 if [[ ! -f $HOME/.bash_profile ]] || ! grep -q $bash_alias $HOME/.bash_profile; then
-	echo "$bash_alias" >> $HOME/.bash_profile
+	echo -e "$bash_alias" >> $HOME/.bash_profile
 fi
  
 # Echo instructions
