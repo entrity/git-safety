@@ -22,13 +22,13 @@
 
 4. Change all of your git aliases involving <code>commit</code> and <code>merge</code> to use <code>safetycommit</code> and <code>safetymerge</code>.
 
-	Before:
-			
+    Before:
+      
         [alias]
           cm = commit -m
           mn = merge --no-ff
 
-  After:
+    After:
 
         [alias]
           cm = safetycommit -m
