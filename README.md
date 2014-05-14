@@ -12,13 +12,27 @@
 
     a. Then to make this active for a particular git project:
 
-        $ cd [my_app_dir] && git config ext.gitsafety true
+        $ cd <my_app_dir> && git config ext.gitsafety true
 
     b. Alternatively, to make this active for all git projects:
 
         $ git config --global ext.gitsafety true
 
 3. After installation, be sure to source your <code>.bash_profile</code> in all open shells or else close and reopen all of your shells.
+
+4. Change all of your git aliases involving <code>commit</code> and <code>merge</code> to use <code>safetycommit</code> and <code>safetymerge</code>.
+
+	Before:
+			
+        [alias]
+          cm = commit -m
+          mn = merge --no-ff
+
+  After:
+
+        [alias]
+          cm = safetycommit -m
+          mn = safetymerge --no-ff
 
 ### Verifying your installation ###
 
