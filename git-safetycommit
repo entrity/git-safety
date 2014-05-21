@@ -30,11 +30,13 @@ if $use_safety_extension; then
  
 	# Forbid commit if diff contains a pry
 	git diff --cached | egrep -q "\+.*binding\.pry" && {
-		fail "You cannot commit 'binding.pry' to source control.\nRun \`git diff --cached | egrep -B 5 \"\+.*binding\.pry\"\`"
+		git diff --cached | egrep -B 5 "\+.*binding\.pry"
+		fail "You cannot commit 'binding.pry' to source control.\nRun the following (or see above):\n\tgit diff --cached | egrep -B 5 \"\+.*binding\.pry\""
 	}
 	# Forbid commit if diff contains debugger
 	git diff --cached | egrep -q "\+.*debugger" && {
-		fail "You cannot commit 'debugger' to source control.\nRun \`git diff --cached | egrep -B 5 \"\+.*debugger\"\`"
+		git diff --cached | egrep -B 5 "\+.*debugger"
+		fail "You cannot commit 'debugger' to source control.\nRun the following (or see above):\n\tgit diff --cached | egrep -B 5 \"\+.*debugger\""
 	}
 
 fi
